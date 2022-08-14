@@ -1,0 +1,56 @@
+<!--
+ - Created by BalazsBiro on 14/08/2022.
+ -->
+
+<!-- Available Products -->
+<template>
+    <div class="slds-box">
+        <lightning-card title="Available Products" icon-name="standard:products">
+            <template if:true={data}>
+                <div class="slds-m-around_medium">
+                    <lightning-datatable
+                            data={data}
+                            columns={columns}
+                            key-field="id"
+                            onrowselection={getSelectedName}
+                            show-row-number-column
+                    >
+                    </lightning-datatable>
+                    <template if:true={isDisplayNoRecords}>
+                        <div class="slds-align_absolute-center">
+                            <br/>
+                            No records found
+                        </div>
+                    </template>
+                    <br/>
+                    <div class="slds-align_absolute-center">
+                        <div class="slds-p-right_xx-small">
+
+                            <lightning-button label="Prev"
+                                              disabled={isPrev} onclick={handlePagePrevAction}
+                                              variant="brand"
+                                              icon-name="utility:back"
+                                              name="prev"></lightning-button>
+                        </div>
+                        <span class="slds-badge slds-badge_lightest">
+                    {recordStart}-{recordEnd} of {totalRecords} | Page {pageNumber} of {totalPages}
+                </span>
+                        <div class="slds-p-left_xx-small">
+                            <lightning-button label="Next"
+                                              disabled={isNext} onclick={handlePageNextAction}
+                                              variant="brand"
+                                              icon-name="utility:forward"
+                                              icon-position="right"
+                                              name="next"></lightning-button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            <template if:true={error}>
+                <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                    We encountered a problem. For help, contact your administrator: {error.body.message}
+                </div>
+            </template>
+        </lightning-card>
+    </div>
+</template>
