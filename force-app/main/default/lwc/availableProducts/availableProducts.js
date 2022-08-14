@@ -27,25 +27,26 @@ export default class AvailableProducts extends LightningElement {
     isPrev = true;
     isNext = true;
     pricebookEntries;
+    columns = columns;
 
     connectedCallback() {
-        this.getProducts();
+        this.getPricebookEntries();
     }
 
 
     handlePageNextAction(){
         this.pageNumber = this.pageNumber+1;
-        this.getProducts();
+        this.getPricebookEntries();
     }
 
 
     handlePagePrevAction(){
         this.pageNumber = this.pageNumber-1;
-        this.getProducts();
+        this.getPricebookEntries();
     }
 
 
-    getProducts(){
+    getPricebookEntries(){
         getPricebookEntries({orderId: this.recordId, pageSize: this.pageSize, pageNumber : this.pageNumber})
         .then(result => {
             this.recordEnd = result.recordEnd;
