@@ -6,10 +6,10 @@
 <template>
     <div class="slds-box">
         <lightning-card title="Available Products" icon-name="standard:products">
-            <template if:true={data}>
+            <template if:true={pricebookEntries}>
                 <div class="slds-m-around_medium">
                     <lightning-datatable
-                            data={data}
+                            data={pricebookEntries}
                             columns={columns}
                             key-field="id"
                             onrowselection={getSelectedName}

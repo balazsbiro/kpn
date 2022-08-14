@@ -26,7 +26,7 @@ export default class AvailableProducts extends LightningElement {
     pageSize = 10;
     isPrev = true;
     isNext = true;
-    @track data;
+    pricebookEntries;
 
     connectedCallback() {
         this.getProducts();
@@ -51,7 +51,7 @@ export default class AvailableProducts extends LightningElement {
             this.recordEnd = result.recordEnd;
             this.totalRecords = result.totalRecords;
             this.recordStart = result.recordStart;
-            this.data = result.pricebookEntries;
+            this.pricebookEntries = result.pricebookEntries;
             this.pageNumber = result.pageNumber;
             this.totalPages = Math.ceil(result.totalRecords / this.pageSize);
             this.isNext = (this.pageNumber == this.totalPages || this.totalPages == 0);
@@ -60,15 +60,15 @@ export default class AvailableProducts extends LightningElement {
         })
         .catch(error => {
             this.error = error;
-            this.data = undefined;
+            this.pricebookEntries = undefined;
         });
     }
 
 
     get isDisplayNoRecords() {
         var isDisplay = true;
-        if(this.data){
-            if(this.data.length == 0){
+        if(this.pricebookEntries){
+            if(this.pricebookEntries.length == 0){
                 isDisplay = true;
             }else{
                 isDisplay = false;
