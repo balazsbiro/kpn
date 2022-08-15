@@ -46,6 +46,7 @@ public with sharing class AvailableProductsController {
                 WHERE
                         IsActive = TRUE
                         AND Pricebook2Id = :priceBookId
+                LIMIT 50000
         ];
 
         priceBookWrapper.recordEnd = totalRecords >= recordEnd ? recordEnd : totalRecords;
@@ -54,7 +55,8 @@ public with sharing class AvailableProductsController {
                 SELECT
                         Id,
                         Name,
-                        UnitPrice
+                        UnitPrice,
+                        Product2Id
                 FROM PricebookEntry
                 WHERE
                         IsActive = TRUE
@@ -65,5 +67,10 @@ public with sharing class AvailableProductsController {
         ];
 
         return priceBookWrapper;
+    }
+
+    @AuraEnabled
+    public static void addProduct(Id orderId, Id productId) {
+
     }
 }

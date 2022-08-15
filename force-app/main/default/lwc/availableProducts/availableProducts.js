@@ -3,15 +3,34 @@
  */
 
 import { LightningElement, api, wire, track } from 'lwc';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getPricebookEntries from '@salesforce/apex/AvailableProductsController.getPricebookEntries';
+import addProduct from '@salesforce/apex/AvailableProductsController.addProduct';
 
 const columns = [
-    { label: 'Product Name', fieldName: 'Name', type: 'text' },
+    {
+        label: 'Product Name',
+        fieldName: 'Name',
+        type: 'text' },
     {
         label: 'List Price',
         fieldName: 'UnitPrice',
         type: 'currency',
         typeAttributes: { currencyCode: 'EUR', step: '0.01' },
+    },
+    {
+        type: 'button',
+        typeAttributes: {
+            label: 'Add',
+            name: 'Add',
+            title: 'Add',
+            disabled: false,
+            value: 'add',
+            iconPosition: 'right'
+        },
+        cellAttributes: {
+            alignment: 'right'
+        }
     }
 ];
 
@@ -78,11 +97,24 @@ export default class AvailableProducts extends LightningElement {
         return isDisplay;
     }
 
-    getSelectedName(event) {
-        const selectedRows = event.detail.selectedRows;
-        // Display that fieldName of the selected rows
-        for (let i = 0; i < selectedRows.length; i++) {
-            alert('You selected: ' + selectedRows[i].Name);
+    callRowAction(event) {
+        if(event.detail.action.name === 'Add') {
+            addProduct({orderId: this.recordId, productId: event.detail.row.Product2Id})
+            .then(result => {
+                this.showToast('Product added', `Successfully added ${event.detail.row.Name}`, 'success');
+            })
+            .catch(error => {
+                this.showToast('Error', 'Couldn\'t add product', 'error');
+            });
         }
+    }
+
+    showToast(title, message, variant){
+        const evt = new ShowToastEvent({
+            title: title,
+            message: message,
+            variant: variant,
+        });
+        this.dispatchEvent(evt);
     }
 }

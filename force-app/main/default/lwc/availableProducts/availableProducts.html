@@ -11,36 +11,36 @@
                     <lightning-datatable
                             data={pricebookEntries}
                             columns={columns}
+                            hide-checkbox-column
+                            onrowaction={callRowAction}
                             key-field="id"
-                            onrowselection={getSelectedName}
                     >
                     </lightning-datatable>
                     <template if:true={isDisplayNoRecords}>
                         <div class="slds-align_absolute-center">
-                            <br/>
                             No records found
                         </div>
                     </template>
-                    <br/>
                     <div class="slds-align_absolute-center">
                         <div class="slds-p-right_xx-small">
-
                             <lightning-button label="Prev"
                                               disabled={isPrev} onclick={handlePagePrevAction}
                                               variant="brand"
                                               icon-name="utility:back"
-                                              name="prev"></lightning-button>
+                                              name="prev">
+                            </lightning-button>
                         </div>
                         <span class="slds-badge slds-badge_lightest">
-                    {recordStart}-{recordEnd} of {totalRecords} | Page {pageNumber} of {totalPages}
-                </span>
+                            {recordStart}-{recordEnd} of {totalRecords} | Page {pageNumber} of {totalPages}
+                        </span>
                         <div class="slds-p-left_xx-small">
                             <lightning-button label="Next"
                                               disabled={isNext} onclick={handlePageNextAction}
                                               variant="brand"
                                               icon-name="utility:forward"
                                               icon-position="right"
-                                              name="next"></lightning-button>
+                                              name="next">
+                            </lightning-button>
                         </div>
                     </div>
                 </div>
