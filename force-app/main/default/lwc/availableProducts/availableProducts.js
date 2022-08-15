@@ -6,12 +6,15 @@ import { LightningElement, api, wire, track } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getPricebookEntries from '@salesforce/apex/AvailableProductsController.getPricebookEntries';
 import addProduct from '@salesforce/apex/AvailableProductsController.addProduct';
+import { publish, createMessageContext,releaseMessageContext } from 'lightning/messageService';
+import productAddedChannel from "@salesforce/messageChannel/ProductAddedChannel__c";
 
 const columns = [
     {
         label: 'Product Name',
         fieldName: 'Name',
-        type: 'text' },
+        type: 'text'
+    },
     {
         label: 'List Price',
         fieldName: 'UnitPrice',
@@ -47,6 +50,7 @@ export default class AvailableProducts extends LightningElement {
     isNext = true;
     pricebookEntries;
     columns = columns;
+    context = createMessageContext();
 
     connectedCallback() {
         this.getPricebookEntries();
@@ -86,7 +90,7 @@ export default class AvailableProducts extends LightningElement {
 
 
     get isDisplayNoRecords() {
-        var isDisplay = true;
+        let isDisplay = true;
         if(this.pricebookEntries){
             if(this.pricebookEntries.length == 0){
                 isDisplay = true;
@@ -102,9 +106,10 @@ export default class AvailableProducts extends LightningElement {
             addProduct({orderId: this.recordId, productId: event.detail.row.Product2Id})
             .then(result => {
                 this.showToast('Product added', `Successfully added ${event.detail.row.Name}`, 'success');
+                publish(this.context, productAddedChannel);
             })
             .catch(error => {
-                this.showToast('Error', 'Couldn\'t add product', 'error');
+                this.showToast('Error', error.body.message, 'error');
             });
         }
     }
@@ -116,5 +121,9 @@ export default class AvailableProducts extends LightningElement {
             variant: variant,
         });
         this.dispatchEvent(evt);
+    }
+
+    disconnectedCallback() {
+        releaseMessageContext(this.context);
     }
 }

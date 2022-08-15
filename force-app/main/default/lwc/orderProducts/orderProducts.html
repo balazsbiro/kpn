@@ -6,6 +6,21 @@
 <template>
     <div class="slds-box">
         <lightning-card title="Order Products" icon-name="standard:order_item">
+            <template if:true={products}>
+                <div class="slds-m-around_medium">
+                    <lightning-datatable
+                            data={products}
+                            columns={columns}
+                            hide-checkbox-column
+                            key-field="id">
+                    </lightning-datatable>
+                </div>
+            </template>
+            <template if:true={error}>
+                <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                    We encountered a problem. For help, contact your administrator: {error.body.message}
+                </div>
+            </template>
         </lightning-card>
     </div>
 </template>

@@ -19,16 +19,8 @@ public with sharing class AvailableProductsController {
         public List<PricebookEntry> pricebookEntries { get; set; }
     }
 
-    @AuraEnabled(Cacheable=true)
+    @AuraEnabled
     public static PriceBookWrapper getPricebookEntries(Id orderId, Integer pageSize, Integer pageNumber) {
-        Id priceBookId = [
-                SELECT
-                        Pricebook2Id
-                FROM Order
-                WHERE Id = :orderId
-                WITH SECURITY_ENFORCED
-        ].Pricebook2Id;
-
         Integer recordEnd = pageSize * pageNumber;
 
         PriceBookWrapper priceBookWrapper = new PriceBookWrapper();
@@ -38,6 +30,8 @@ public with sharing class AvailableProductsController {
         Integer offset = (pageNumber - 1) * pageSize;
 
         priceBookWrapper.recordStart = offset + 1;
+
+        Id priceBookId = getOrdersPriceBook(orderId);
 
         Integer totalRecords = [
                 SELECT
@@ -72,5 +66,71 @@ public with sharing class AvailableProductsController {
     @AuraEnabled
     public static void addProduct(Id orderId, Id productId) {
 
+        if(getOrderActivated(orderId))
+        {
+            throw new AuraHandledException('Cannot add Product, because Order is already activated');
+        }
+
+        List<OrderItem> existingOrderItem = [
+                SELECT
+                        Id,
+                        Quantity
+                FROM OrderItem
+                WHERE
+                        OrderId = :orderId
+                        AND Product2Id = :productId
+                LIMIT 1
+        ];
+
+        OrderItem orderItemToUpsert;
+
+        if (existingOrderItem.isEmpty()) {
+            Id priceBookId = getOrdersPriceBook(orderId);
+            PricebookEntry pbEntry = [
+                    SELECT
+                            Id,
+                            UnitPrice
+                    FROM PricebookEntry
+                    WHERE
+                            Product2Id = :productId
+                            AND Pricebook2Id = :priceBookId
+            ];
+
+            orderItemToUpsert = new OrderItem(
+                    OrderId = orderId,
+                    PricebookEntryId = pbEntry.Id,
+                    Product2Id = productId,
+                    Quantity = 1,
+                    UnitPrice = pbEntry.UnitPrice
+            );
+        } else {
+            orderItemToUpsert = existingOrderItem.get(0);
+            orderItemToUpsert.Quantity++;
+        }
+
+        upsert orderItemToUpsert;
+    }
+
+    private static Id getOrdersPriceBook(Id orderId) {
+        return [
+                SELECT
+                        Pricebook2Id
+                FROM Order
+                WHERE Id = :orderId
+                WITH SECURITY_ENFORCED
+        ].Pricebook2Id;
+    }
+
+    public static Boolean getOrderActivated(Id recordId) {
+        System.debug(recordId);
+        Order order = [
+                SELECT
+                        Id,
+                        Status
+                FROM Order
+                WHERE Id = :recordId
+        ];
+
+        return order.Status == 'Activated';
     }
 }
