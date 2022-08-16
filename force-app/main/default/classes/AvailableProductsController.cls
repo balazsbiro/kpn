@@ -40,7 +40,6 @@ public with sharing class AvailableProductsController {
 
     @AuraEnabled
     public static void addProduct(Id orderId, Id productId) {
-
         if (OrderSelector.getOrderIsActivated(orderId)) {
             throw new AuraHandledException(Label.OrderAlreadyActivated);
         }

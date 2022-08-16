@@ -4,6 +4,7 @@
 
 public with sharing class OrderConstants {
 
+    public static final String STATUS_DRAFT = 'Draft';
     public static final String STATUS_ACTIVATED = 'Activated';
 
     public static final Map<String, String> STATUSES {
