@@ -8,7 +8,7 @@ import {subscribe,createMessageContext,releaseMessageContext } from 'lightning/m
 import productAddedChannel from "@salesforce/messageChannel/ProductAddedChannel__c";
 import problemAskForHelp from '@salesforce/label/c.ProblemAskHelp';
 
-const columns = [
+const COLUMNS = [
     {
         label: 'Product Name',
         fieldName: 'ProductName',
@@ -37,7 +37,7 @@ export default class OrderProducts extends LightningElement {
     @api recordId;
     products;
     error;
-    columns = columns;
+    columns = COLUMNS;
     subscription = null;
     context = createMessageContext();
     label = {

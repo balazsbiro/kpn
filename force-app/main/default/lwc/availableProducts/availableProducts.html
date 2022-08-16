@@ -48,7 +48,7 @@
             </template>
             <template if:true={error}>
                 <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
-                    We encountered a problem. For help, contact your administrator: {error.body.message}
+                    {label.problemAskForHelp} {error.body.message}
                 </div>
             </template>
         </lightning-card>

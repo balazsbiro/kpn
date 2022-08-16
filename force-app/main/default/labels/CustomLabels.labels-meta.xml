@@ -12,7 +12,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>OrderAlreadyActivated</shortDescription>
-        <value>Action bot available, because the order is already activated.</value>
+        <value>Action is not available, because the order is already activated.</value>
     </labels>
     <labels>
         <fullName>ProblemAskHelp</fullName>

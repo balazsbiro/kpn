@@ -3,13 +3,14 @@
  */
 
 import { LightningElement, api } from 'lwc';
-import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getPricebookEntries from '@salesforce/apex/AvailableProductsController.getPricebookEntries';
 import addProduct from '@salesforce/apex/AvailableProductsController.addProduct';
 import { publish, createMessageContext,releaseMessageContext } from 'lightning/messageService';
 import productAddedChannel from "@salesforce/messageChannel/ProductAddedChannel__c";
+import problemAskForHelp from '@salesforce/label/c.ProblemAskHelp';
+import { showToast } from 'c/utils';
 
-const columns = [
+const COLUMNS = [
     {
         label: 'Product Name',
         fieldName: 'Name',
@@ -36,6 +37,7 @@ const columns = [
         }
     }
 ];
+const PAGE_SIZE = 10;
 
 export default class AvailableProducts extends LightningElement {
     @api recordId;
@@ -45,12 +47,15 @@ export default class AvailableProducts extends LightningElement {
     totalRecords = 0;
     totalPages = 0;
     error = null;
-    pageSize = 10;
+    pageSize = PAGE_SIZE;
     isPrev = true;
     isNext = true;
     pricebookEntries;
-    columns = columns;
+    columns = COLUMNS;
     context = createMessageContext();
+    label = {
+        problemAskForHelp
+    };
 
     connectedCallback() {
         this.getPricebookEntries();
@@ -105,22 +110,13 @@ export default class AvailableProducts extends LightningElement {
         if(event.detail.action.name === 'Add') {
             addProduct({orderId: this.recordId, productId: event.detail.row.Product2Id})
             .then(result => {
-                this.showToast('Product added', `Successfully added ${event.detail.row.Name}`, 'success');
+                showToast('Product added', `Successfully added ${event.detail.row.Name}`, 'success');
                 publish(this.context, productAddedChannel);
             })
             .catch(error => {
-                this.showToast('Error', error.body.message, 'error');
+                showToast('Error', error.body.message, 'error');
             });
         }
-    }
-
-    showToast(title, message, variant){
-        const evt = new ShowToastEvent({
-            title: title,
-            message: message,
-            variant: variant,
-        });
-        this.dispatchEvent(evt);
     }
 
     disconnectedCallback() {
