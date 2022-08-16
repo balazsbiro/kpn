@@ -11,6 +11,7 @@ public with sharing class OrderSelector {
                 FROM Order
                 WHERE Id = :orderId
                 WITH SECURITY_ENFORCED
+                LIMIT 1
         ].Pricebook2Id;
     }
 
@@ -22,8 +23,34 @@ public with sharing class OrderSelector {
                 FROM Order
                 WHERE Id = :recordId
                 WITH SECURITY_ENFORCED
+                LIMIT 1
         ];
 
-        return order.Status == 'Activated';
+        return order.Status == OrderConstants.STATUSES.get(OrderConstants.STATUS_ACTIVATED);
+    }
+
+    public static Order getOrderWithOrderItems(Id orderId) {
+        return [
+                SELECT
+                        Id,
+                        Account.AccountNumber,
+                        OrderNumber,
+                        Type,
+                        Status,
+                        (
+                                SELECT
+                                        Id,
+                                        Product2.Name,
+                                        Product2.ProductCode,
+                                        UnitPrice,
+                                        Quantity
+                                FROM OrderItems
+                        )
+                FROM Order
+                WHERE
+                        Id = :orderId
+                WITH SECURITY_ENFORCED
+                LIMIT 1
+        ];
     }
 }

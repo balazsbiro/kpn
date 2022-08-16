@@ -38,11 +38,16 @@
     </types>
     <types>
         <members>OrderAlreadyActivated</members>
+        <members>IntegrationFailed</members>
         <name>CustomLabel</name>
     </types>
     <types>
         <members>*</members>
         <name>NamedCredential</name>
+    </types>
+    <types>
+        <members>Order_Record_Page</members>
+        <name>FlexiPage</name>
     </types>
     <version>55.0</version>
 </Package>

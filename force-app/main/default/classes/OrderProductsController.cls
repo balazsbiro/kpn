@@ -6,16 +6,6 @@ public with sharing class OrderProductsController {
 
     @AuraEnabled
     public static List<OrderItem> getOrderProducts(Id orderId) {
-        return [
-                SELECT
-                        Id,
-                        Product2.Name,
-                        UnitPrice,
-                        Quantity,
-                        TotalPrice
-                FROM OrderItem
-                WHERE
-                        OrderId = :orderId
-        ];
+        return OrderItemSelector.getOrderItems(orderId);
     }
 }

@@ -66,5 +66,4 @@ public with sharing class AvailableProductsController {
 
         upsert orderItemToUpsert;
     }
-
 }

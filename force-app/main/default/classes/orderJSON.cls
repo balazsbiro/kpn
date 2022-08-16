@@ -3,8 +3,8 @@
  */
 
 public with sharing class orderJSON {
-    public String accountNumber;    //
-    public String orderNumber;    //
+    public String accountNumber;
+    public String orderNumber;
     public String type;    //order type
     public String status;    //order status
     public List<cls_orderProducts> orderProducts;
@@ -24,34 +24,15 @@ public with sharing class orderJSON {
     }
 
     public orderJSON(Id orderId) {
-        Order orderWithProducts = [
-                SELECT
-                        Id,
-                        Account.AccountNumber,
-                        OrderNumber,
-                        Type,
-                        Status,
-                        (
-                                SELECT
-                                        Id,
-                                        Product2.Name,
-                                        Product2.ProductCode,
-                                        UnitPrice,
-                                        Quantity
-                                FROM OrderItems
-                        )
-                FROM Order
-                WHERE
-                        Id = :orderId
-        ];
+        Order orderWithOrderItems = OrderSelector.getOrderWithOrderItems(orderId);
 
-        accountNumber = orderWithProducts.Account.AccountNumber;
-        orderNumber = orderWithProducts.OrderNumber;
-        type = orderWithProducts.Type;
-        status = orderWithProducts.Status;
+        accountNumber = orderWithOrderItems.Account.AccountNumber;
+        orderNumber = orderWithOrderItems.OrderNumber;
+        type = orderWithOrderItems.Type;
+        status = orderWithOrderItems.Status;
 
         orderProducts = new List<cls_orderProducts>();
-        for (OrderItem orderItem : orderWithProducts.OrderItems) {
+        for (OrderItem orderItem : orderWithOrderItems.OrderItems) {
             orderProducts.add(new cls_orderProducts(
                     orderItem.Product2.Name,
                     orderItem.Product2.ProductCode,

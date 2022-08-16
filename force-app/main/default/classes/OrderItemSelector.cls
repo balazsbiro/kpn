@@ -17,4 +17,18 @@ public with sharing class OrderItemSelector {
                 LIMIT 1
         ];
     }
+
+    public static List<OrderItem> getOrderItems(Id orderId) {
+        return [
+                SELECT
+                        Id,
+                        Product2.Name,
+                        UnitPrice,
+                        Quantity,
+                        TotalPrice
+                FROM OrderItem
+                WHERE
+                        OrderId = :orderId
+        ];
+    }
 }
