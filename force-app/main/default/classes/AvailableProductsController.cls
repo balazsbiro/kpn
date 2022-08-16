@@ -21,44 +21,19 @@ public with sharing class AvailableProductsController {
 
     @AuraEnabled
     public static PriceBookWrapper getPricebookEntries(Id orderId, Integer pageSize, Integer pageNumber) {
-        Integer recordEnd = pageSize * pageNumber;
-
         PriceBookWrapper priceBookWrapper = new PriceBookWrapper();
         priceBookWrapper.pageNumber = pageNumber;
         priceBookWrapper.pageSize = pageSize;
 
-        Integer offset = (pageNumber - 1) * pageSize;
+        Id priceBookId = OrderSelector.getOrdersPriceBook(orderId);
 
-        priceBookWrapper.recordStart = offset + 1;
-
-        Id priceBookId = getOrdersPriceBook(orderId);
-
-        Integer totalRecords = [
-                SELECT
-                        COUNT()
-                FROM PricebookEntry
-                WHERE
-                        IsActive = TRUE
-                        AND Pricebook2Id = :priceBookId
-                LIMIT 50000
-        ];
+        Integer totalRecords = PriceBookEntrySelector.countPriceBookEntries(priceBookId);
+        Integer recordEnd = pageSize * pageNumber;
 
         priceBookWrapper.recordEnd = totalRecords >= recordEnd ? recordEnd : totalRecords;
         priceBookWrapper.totalRecords = totalRecords;
-        priceBookWrapper.pricebookEntries = [
-                SELECT
-                        Id,
-                        Name,
-                        UnitPrice,
-                        Product2Id
-                FROM PricebookEntry
-                WHERE
-                        IsActive = TRUE
-                        AND Pricebook2Id = :priceBookId
-                WITH SECURITY_ENFORCED
-                LIMIT :Math.min(pageSize, 50000)
-                OFFSET :offset
-        ];
+        priceBookWrapper.recordStart = ((pageNumber - 1) * pageSize) + 1;
+        priceBookWrapper.pricebookEntries = PriceBookEntrySelector.getPaginatedPriceBookEntries(priceBookId, pageSize, pageNumber);
 
         return priceBookWrapper;
     }
@@ -66,36 +41,17 @@ public with sharing class AvailableProductsController {
     @AuraEnabled
     public static void addProduct(Id orderId, Id productId) {
 
-        if(getOrderActivated(orderId))
-        {
-            throw new AuraHandledException('Cannot add Product, because Order is already activated');
+        if (OrderSelector.getOrderIsActivated(orderId)) {
+            throw new AuraHandledException(Label.OrderAlreadyActivated);
         }
 
-        List<OrderItem> existingOrderItem = [
-                SELECT
-                        Id,
-                        Quantity
-                FROM OrderItem
-                WHERE
-                        OrderId = :orderId
-                        AND Product2Id = :productId
-                LIMIT 1
-        ];
+        List<OrderItem> existingOrderItem = OrderItemSelector.getOrderItem(orderId, productId);
 
         OrderItem orderItemToUpsert;
 
         if (existingOrderItem.isEmpty()) {
-            Id priceBookId = getOrdersPriceBook(orderId);
-            PricebookEntry pbEntry = [
-                    SELECT
-                            Id,
-                            UnitPrice
-                    FROM PricebookEntry
-                    WHERE
-                            Product2Id = :productId
-                            AND Pricebook2Id = :priceBookId
-            ];
-
+            Id priceBookId = OrderSelector.getOrdersPriceBook(orderId);
+            PricebookEntry pbEntry = PriceBookEntrySelector.getPriceBookEntry(productId, priceBookId);
             orderItemToUpsert = new OrderItem(
                     OrderId = orderId,
                     PricebookEntryId = pbEntry.Id,
@@ -111,26 +67,4 @@ public with sharing class AvailableProductsController {
         upsert orderItemToUpsert;
     }
 
-    private static Id getOrdersPriceBook(Id orderId) {
-        return [
-                SELECT
-                        Pricebook2Id
-                FROM Order
-                WHERE Id = :orderId
-                WITH SECURITY_ENFORCED
-        ].Pricebook2Id;
-    }
-
-    public static Boolean getOrderActivated(Id recordId) {
-        System.debug(recordId);
-        Order order = [
-                SELECT
-                        Id,
-                        Status
-                FROM Order
-                WHERE Id = :recordId
-        ];
-
-        return order.Status == 'Activated';
-    }
 }

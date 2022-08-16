@@ -12,7 +12,7 @@ public with sharing class IntegrationActionController {
     public static void integrateOrder(Id orderId)
     {
 
-        if(AvailableProductsController.getOrderActivated(orderId))
+        if(OrderSelector.getOrderIsActivated(orderId))
         {
             throw new AuraHandledException('Cannot Integrate Order, because Order is already activated');
         }
