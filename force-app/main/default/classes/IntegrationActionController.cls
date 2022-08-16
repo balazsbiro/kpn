@@ -2,7 +2,7 @@
  * Created by BalazsBiro on 15/08/2022.
  */
 
-public with sharing class IntegrationUtil {
+public with sharing class IntegrationActionController {
 
     public static final Integer API_TIMEOUT = 120000;
     public static final Integer SUCCESS_CODE = 200;

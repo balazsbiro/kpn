@@ -3,7 +3,7 @@
  */
 
 import { LightningElement, api } from 'lwc';
-import integrateOrder from '@salesforce/apex/IntegrationUtil.integrateOrder';
+import integrateOrder from '@salesforce/apex/IntegrationActionController.integrateOrder';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { getRecordNotifyChange } from 'lightning/uiRecordApi';
 
