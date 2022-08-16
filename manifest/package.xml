@@ -39,6 +39,7 @@
     <types>
         <members>OrderAlreadyActivated</members>
         <members>IntegrationFailed</members>
+        <members>ProblemAskHelp</members>
         <name>CustomLabel</name>
     </types>
     <types>

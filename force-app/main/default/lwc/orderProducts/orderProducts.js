@@ -6,6 +6,7 @@ import { LightningElement, api, wire } from 'lwc';
 import getProducts from '@salesforce/apex/OrderProductsController.getOrderProducts';
 import {subscribe,createMessageContext,releaseMessageContext } from 'lightning/messageService';
 import productAddedChannel from "@salesforce/messageChannel/ProductAddedChannel__c";
+import problemAskForHelp from '@salesforce/label/c.ProblemAskHelp';
 
 const columns = [
     {
@@ -35,9 +36,13 @@ const columns = [
 export default class OrderProducts extends LightningElement {
     @api recordId;
     products;
+    error;
     columns = columns;
     subscription = null;
     context = createMessageContext();
+    label = {
+        problemAskForHelp
+    };
 
     connectedCallback() {
         this.getProducts();

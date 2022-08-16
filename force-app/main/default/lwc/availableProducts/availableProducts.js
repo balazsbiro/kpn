@@ -2,7 +2,7 @@
  * Created by BalazsBiro on 14/08/2022.
  */
 
-import { LightningElement, api, wire, track } from 'lwc';
+import { LightningElement, api } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getPricebookEntries from '@salesforce/apex/AvailableProductsController.getPricebookEntries';
 import addProduct from '@salesforce/apex/AvailableProductsController.addProduct';

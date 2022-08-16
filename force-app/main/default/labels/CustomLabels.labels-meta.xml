@@ -14,4 +14,11 @@
         <shortDescription>OrderAlreadyActivated</shortDescription>
         <value>Action bot available, because the order is already activated.</value>
     </labels>
+    <labels>
+        <fullName>ProblemAskHelp</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ProblemAskHelp</shortDescription>
+        <value>We encountered a problem. For help, contact your administrator:</value>
+    </labels>
 </CustomLabels>
