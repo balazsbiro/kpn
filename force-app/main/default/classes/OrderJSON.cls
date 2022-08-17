@@ -2,7 +2,7 @@
  * Created by BalazsBiro on 15/08/2022.
  */
 
-public with sharing class orderJSON {
+public with sharing class OrderJSON {
     public String accountNumber;
     public String orderNumber;
     public String type;    //order type
@@ -23,7 +23,7 @@ public with sharing class orderJSON {
         }
     }
 
-    public orderJSON(Id orderId) {
+    public OrderJSON(Id orderId) {
         Order orderWithOrderItems = OrderSelector.getOrderWithOrderItems(orderId);
 
         accountNumber = orderWithOrderItems.Account.AccountNumber;
