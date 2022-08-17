@@ -1,0 +1,59 @@
+{
+  "pageNumber": 1,
+  "pageSize": 10,
+  "pricebookEntries": [{
+    "Id": "01u7Q000004ps8HQAQ",
+    "Name": "GenWatt Diesel 200kW",
+    "UnitPrice": 25000,
+    "Product2Id": "01t7Q000003UD6XQAW"
+  }, {
+    "Id": "01u7Q000004ps8IQAQ",
+    "Name": "GenWatt Diesel 10kW",
+    "UnitPrice": 5000,
+    "Product2Id": "01t7Q000003UD6YQAW"
+  }, {
+    "Id": "01u7Q000004ps8JQAQ",
+    "Name": "Installation: Industrial - High",
+    "UnitPrice": 85000,
+    "Product2Id": "01t7Q000003UD6ZQAW"
+  }, {
+    "Id": "01u7Q000004ps8KQAQ",
+    "Name": "SLA: Silver",
+    "UnitPrice": 20000,
+    "Product2Id": "01t7Q000003UD6aQAG"
+  }, {
+    "Id": "01u7Q000004ps8LQAQ",
+    "Name": "GenWatt Propane 500kW",
+    "UnitPrice": 50000,
+    "Product2Id": "01t7Q000003UD6bQAG"
+  }, {
+    "Id": "01u7Q000004ps8MQAQ",
+    "Name": "SLA: Platinum",
+    "UnitPrice": 40000,
+    "Product2Id": "01t7Q000003UD6cQAG"
+  }, {
+    "Id": "01u7Q000004ps8NQAQ",
+    "Name": "GenWatt Propane 100kW",
+    "UnitPrice": 15000,
+    "Product2Id": "01t7Q000003UD6dQAG"
+  }, {
+    "Id": "01u7Q000004ps8OQAQ",
+    "Name": "GenWatt Propane 1500kW",
+    "UnitPrice": 120000,
+    "Product2Id": "01t7Q000003UD6eQAG"
+  }, {
+    "Id": "01u7Q000004ps8PQAQ",
+    "Name": "Installation: Portable",
+    "UnitPrice": 5000,
+    "Product2Id": "01t7Q000003UD6iQAG"
+  }, {
+    "Id": "01u7Q000004ps8QQAQ",
+    "Name": "GenWatt Diesel 1000kW",
+    "UnitPrice": 100000,
+    "Product2Id": "01t7Q000003UD6fQAG"
+  }
+  ],
+  "recordEnd": 10,
+  "recordStart": 1,
+  "totalRecords": 17
+}
