@@ -7,7 +7,12 @@
     <div class="slds-box">
         <lightning-card title="Integrate Order With External System" icon-name="standard:apex_plugin">
             <div class="slds-align_absolute-center">
-                <lightning-button variant="brand" label="Integrate" title="Integrate" onclick={handleClick}></lightning-button>
+                <template if:false={isLoading}>
+                    <lightning-button variant="brand" label="Integrate" title="Integrate" onclick={handleClick}></lightning-button>
+                </template>
+                <template if:true={isLoading}>
+                    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                </template>
             </div>
         </lightning-card>
     </div>

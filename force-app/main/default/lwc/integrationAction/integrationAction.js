@@ -6,28 +6,24 @@ import { LightningElement, api } from 'lwc';
 import integrateOrder from '@salesforce/apex/IntegrationActionController.integrateOrder';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { showToast } from 'c/utils';
 
 export default class IntegrationAction extends LightningElement {
     @api recordId;
+    isLoading = false;
 
     handleClick(event){
+        this.isLoading = true;
         integrateOrder({orderId: this.recordId})
         .then(result => {
-            this.showToast('Order Integrated', 'Successfully integrated the Order', 'success');
+            showToast('Order Integrated', 'Successfully integrated the Order', 'success');
             getRecordNotifyChange([{recordId: this.recordId}]);
         })
         .catch(error => {
-            this.showToast('Error', error.body.message, 'error');
+            showToast('Error', error.body.message, 'error');
+        })
+        .finally(() => {
+            this.isLoading = false;
         });
     }
-
-    showToast(title, message, variant){
-        const evt = new ShowToastEvent({
-            title: title,
-            message: message,
-            variant: variant,
-        });
-        this.dispatchEvent(evt);
-    }
-
 }
