@@ -41,21 +41,21 @@ const PAGE_SIZE = 10;
 
 export default class AvailableProducts extends LightningElement {
     @api recordId;
+    pageSize = PAGE_SIZE;
+    columns = COLUMNS;
+    label = {
+        problemAskForHelp
+    };
     recordEnd = 0;
     recordStart = 0;
     pageNumber = 1;
     totalRecords = 0;
     totalPages = 0;
     error = null;
-    pageSize = PAGE_SIZE;
     isPrev = true;
     isNext = true;
     pricebookEntries;
-    columns = COLUMNS;
     context = createMessageContext();
-    label = {
-        problemAskForHelp
-    };
 
     connectedCallback() {
         this.getPricebookEntries();
