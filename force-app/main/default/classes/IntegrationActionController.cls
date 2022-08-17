@@ -18,7 +18,7 @@ public with sharing class IntegrationActionController {
         req.setTimeout(API_TIMEOUT);
         req.setHeader('Content-Type', 'application/json');
         req.setEndpoint('callout:ExternalSystem');
-        req.setBody(JSON.serialize(new orderJSON(orderId)));
+        req.setBody(JSON.serialize(new OrderJSON(orderId)));
 
         Http http = new Http();
         HttpResponse res = http.send(req);
