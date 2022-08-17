@@ -36,5 +36,11 @@ describe('c-available-products', ()=>{
         const table = element.shadowRoot.querySelector('lightning-datatable');
         expect(table.data.length).toBe(APEX_PRICEBOOK_WRAPPER.pricebookEntries.length);
         expect(table.data[0].Name).toBe(APEX_PRICEBOOK_WRAPPER.pricebookEntries[0].Name);
+
+        element.shadowRoot
+            .querySelectorAll('lightning-button')
+            .forEach((button) => {
+                button.click();
+        });
     });
 })
