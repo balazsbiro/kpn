@@ -5,45 +5,45 @@
 public with sharing class TestUtility {
 
     public static void insertOrder(Boolean withOrderItem) {
-        Account a = new Account();
-        a.Name = 'Test Account';
-        insert a;
+        Account account = new Account();
+        account.Name = 'Test Account';
+        insert account;
 
-        Product2 p = new Product2();
-        p.Name = 'Test Product';
-        p.Description = 'Test Product Entry 1';
-        p.ProductCode = 'ABC';
-        p.IsActive = true;
-        insert p;
+        Product2 product = new Product2();
+        product.Name = 'Test Product';
+        product.Description = 'Test Product Entry 1';
+        product.ProductCode = 'ABC';
+        product.IsActive = true;
+        insert product;
 
         Id pricebookId = Test.getStandardPricebookId();
 
         PricebookEntry standardPrice = new PricebookEntry();
         standardPrice.Pricebook2Id = pricebookId;
-        standardPrice.Product2Id = p.Id;
+        standardPrice.Product2Id = product.Id;
         standardPrice.UnitPrice = 1;
         standardPrice.IsActive = true;
         standardPrice.UseStandardPrice = false;
         insert standardPrice ;
 
-        Order o = new Order();
-        o.Name = 'Test Order';
-        o.Status = OrderConstants.STATUSES.get(OrderConstants.STATUS_DRAFT);
-        o.EffectiveDate = System.today();
-        o.EndDate = System.today() + 4;
-        o.AccountId = a.Id;
-        o.Pricebook2Id = pricebookId ;
-        insert o;
+        Order order = new Order();
+        order.Name = 'Test Order';
+        order.Status = OrderConstants.STATUSES.get(OrderConstants.STATUS_DRAFT);
+        order.EffectiveDate = System.today();
+        order.EndDate = System.today() + 4;
+        order.AccountId = account.Id;
+        order.Pricebook2Id = pricebookId ;
+        insert order;
 
         if(withOrderItem)
         {
-            OrderItem i = new OrderItem();
-            i.OrderId = o.Id;
-            i.Quantity = 1;
-            i.UnitPrice = 1000;
-            i.Product2Id = p.Id;
-            i.PricebookEntryId = standardPrice.Id;
-            insert i;
+            OrderItem orderItem = new OrderItem();
+            orderItem.OrderId = order.Id;
+            orderItem.Quantity = 1;
+            orderItem.UnitPrice = 1000;
+            orderItem.Product2Id = product.Id;
+            orderItem.PricebookEntryId = standardPrice.Id;
+            insert orderItem;
         }
     }
 }

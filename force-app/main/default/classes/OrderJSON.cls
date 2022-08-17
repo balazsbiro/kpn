@@ -5,15 +5,15 @@
 public with sharing class OrderJSON {
     public String accountNumber;
     public String orderNumber;
-    public String type;    //order type
-    public String status;    //order status
+    public String type;
+    public String status;
     public List<cls_orderProducts> orderProducts;
 
     class cls_orderProducts {
-        public String name;    //product name
-        public String code;    //product code
-        public Decimal unitPrice;    //10
-        public Integer quantity;    //1
+        public String name;
+        public String code;
+        public Decimal unitPrice;
+        public Integer quantity;
 
         public cls_orderProducts(String name, String code, Decimal unitPrice, Decimal quantity) {
             this.name = name;
